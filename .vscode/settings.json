@@ -1,0 +1,20 @@
+{
+  "editor.fontFamily": "'Roboto Mono', Consolas, 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "window.zoomLevel": 1,
+  "diffEditor.hideUnchangedRegions.minimumLineCount": 3,
+  "workbench.editor.decorations.colors": true,
+  "workbench.editor.titleScrollbarSizing": "default",
+  "files.autoSave": "afterDelay",
+  "editor.formatOnPaste": true,
+  "diffEditor.codeLens": false,
+  "indentRainbow.colorOnWhiteSpaceOnly": false,
+  "indentRainbow.indicatorStyle": "light",
+  "workbench.iconTheme": "material-icon-theme",
+  "autoimport.autoComplete": true,
+  "importCost.fontStyle": "italic",
+  "editor.cursorBlinking": "blink",
+  "editor.fontVariations": true,
+  "files.autoSaveDelay": 100
+}
