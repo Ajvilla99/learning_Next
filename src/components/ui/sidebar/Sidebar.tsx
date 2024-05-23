@@ -11,6 +11,9 @@ import { useUIStore } from "@/store";
 // Icons
 import { IoCloseOutline, IoLogInOutline, IoLogOutOutline, IoPeopleOutline, IoPersonOutline, IoSearchOutline, IoShirtOutline, IoTicketOutline } from "react-icons/io5"
 
+// Actions
+import { logout } from "@/actions";
+
 export const Sidebar = () => {
 
     const isSideMenuOpen = useUIStore( state => state.isSideMenuOpen);
@@ -92,7 +95,7 @@ export const Sidebar = () => {
 
             <Link
                 onClick={ () => closeMenu() }
-                href="/"
+                href="/auth/login"
                 className="flex items-center mt-7 p-2 hover:bg-gray-100 rounded transition-all"
             >
                 <IoLogInOutline size={30}/>
@@ -100,9 +103,9 @@ export const Sidebar = () => {
             </Link>
 
             <Link
-                onClick={ () => closeMenu() }
+                onClick={  () => logout()  }
                 href="/"
-                className="flex items-center mt-7 p-2 hover:bg-gray-100 rounded transition-all text-red-500"
+                className="flex w-full items-center mt-7 p-2 hover:bg-gray-100 rounded transition-all text-red-500"
             >
                 <IoLogOutOutline size={30}/>
                 <span className="ml-3 text-base ">Salir</span>
