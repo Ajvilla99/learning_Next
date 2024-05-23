@@ -73,7 +73,8 @@ export const Sidebar = () => {
 
             {/* Menú */}
             <Link
-                href="/"
+                onClick={ () => closeMenu() }
+                href="/profile"
                 className="flex items-center mt-7 p-2 hover:bg-gray-100 rounded transition-all"
             >
                 <IoPersonOutline size={30}/>
@@ -81,6 +82,7 @@ export const Sidebar = () => {
             </Link>
 
             <Link
+                onClick={ () => closeMenu() }
                 href="/"
                 className="flex items-center mt-7 p-2 hover:bg-gray-100 rounded transition-all"
             >
@@ -89,6 +91,7 @@ export const Sidebar = () => {
             </Link>
 
             <Link
+                onClick={ () => closeMenu() }
                 href="/"
                 className="flex items-center mt-7 p-2 hover:bg-gray-100 rounded transition-all"
             >
@@ -97,6 +100,7 @@ export const Sidebar = () => {
             </Link>
 
             <Link
+                onClick={ () => closeMenu() }
                 href="/"
                 className="flex items-center mt-7 p-2 hover:bg-gray-100 rounded transition-all text-red-500"
             >
@@ -108,6 +112,7 @@ export const Sidebar = () => {
                 className="w-full h-px bg-gray-200 my-10" />
 
             <Link
+                onClick={ () => closeMenu() }
                 href="/"
                 className="flex items-center mt-7 p-2 hover:bg-gray-100 rounded transition-all"
             >
@@ -116,6 +121,7 @@ export const Sidebar = () => {
             </Link>
 
             <Link
+                onClick={ () => closeMenu() }
                 href="/"
                 className="flex items-center mt-7 p-2 hover:bg-gray-100 rounded transition-all"
             >
@@ -124,6 +130,7 @@ export const Sidebar = () => {
             </Link>
 
             <Link
+                onClick={ () => closeMenu() }
                 href="/"
                 className="flex items-center mt-7 p-2 hover:bg-gray-100 rounded transition-all"
             >

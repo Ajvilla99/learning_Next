@@ -16,5 +16,6 @@
   "importCost.fontStyle": "italic",
   "editor.cursorBlinking": "blink",
   "editor.fontVariations": true,
-  "files.autoSaveDelay": 100
+  "files.autoSaveDelay": 100,
+  "terminal.integrated.fontSize": 12
 }
