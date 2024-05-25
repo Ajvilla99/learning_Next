@@ -13,10 +13,13 @@ export default function ShopLayout({ children }: Readonly<{ children: React.Reac
 
       <TopMenu />
       <Sidebar />
+
       <div className="px-0 sm:px-7">
         { children }
       </div>
+
       <Footer />
+      
     </main>
   );
 }

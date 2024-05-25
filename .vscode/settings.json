@@ -17,5 +17,6 @@
   "editor.cursorBlinking": "blink",
   "editor.fontVariations": true,
   "files.autoSaveDelay": 100,
-  "terminal.integrated.fontSize": 12
+  "terminal.integrated.fontSize": 12,
+  "explorer.compactFolders": false
 }
