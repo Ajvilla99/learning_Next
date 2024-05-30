@@ -9,3 +9,5 @@ export * from './products/get-stock-by-slug';
 export * from './country/get-country';
 
 export * from './address/set-user-address';
+export * from './address/delete-user-address';
+export * from './address/get-user-address';
