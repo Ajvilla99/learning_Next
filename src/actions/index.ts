@@ -5,3 +5,7 @@ export * from './auth/register';
 export * from './products/product-pagination';
 export * from './products/get-product-by-slug';
 export * from './products/get-stock-by-slug';
+
+export * from './country/get-country';
+
+export * from './address/set-user-address';
