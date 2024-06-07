@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
 import { placeOrder } from "@/actions";
@@ -9,13 +10,16 @@ import { currentcyFormat, sleep } from "@/utils";
 
 export const PlaceOrder = () => {
 
+  const router = useRouter()
   const [loaded, setLoaded] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const address = useAddressStore((state) => state.address);
 
   const { itemsInCart, subTotal, tax, total } = useCartStore( state => state.getSubmmaryInformation() );
   const cart = useCartStore( state => state.cart );
+  const clearCart = useCartStore( state => state.clearCart );
 
   useEffect(() => {
     setLoaded(true);
@@ -31,10 +35,16 @@ export const PlaceOrder = () => {
       size: product.size,
     }))
 
+    //! Server Action
     const resp = await placeOrder( productsToOrder, address );
-    console.log(resp)
-
-    setIsPlacingOrder(false);
+    if ( !resp.ok ) {
+      setIsPlacingOrder(false);
+      setErrorMessage(resp.message);
+      return;
+    }
+    
+    clearCart();
+    router.replace('/orders/' + resp.order!.id )
   }
   
 
@@ -47,7 +57,6 @@ export const PlaceOrder = () => {
 
               <h2 className="text-2xl font-bold mb-2">Dirección de entrega</h2>
               <div className="mb-10">
-                <p className="text-xl">Gernando Herrera</p>
                 <p>{ address.firstName }</p>
                 <p>{ address.address }</p>
                 <p>{ address.address2 }</p>
@@ -90,10 +99,10 @@ export const PlaceOrder = () => {
                 </p>
 
 
-                {/* <span 
+                <span 
                   className="bg-red-200 text-red-700 w-full flex mb-2 py-1 items-center justify-center rounded">
-                  Error de creación
-                </span> */}
+                  { errorMessage }
+                </span>
                 <button
                   onClick={ onPLaceOrder }
                   // href='/orders/123'

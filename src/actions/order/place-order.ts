@@ -5,8 +5,6 @@ import type { Address, Size } from "@/interfaces";
 import prisma from "@/lib/prisma";
 
 
-
-
 interface ProductToOrder {
   productId: string;
   quantity: number;
@@ -16,10 +14,10 @@ interface ProductToOrder {
 export const placeOrder = async( productIds: ProductToOrder[], address: Address ) => {
 
   const session = await auth();
-  const userId1 =  session?.user.id;
+  const userId =  session?.user.id;
 
   // Verificar sesion de usuario
-  if ( !userId1 ) {
+  if ( !userId ) {
     return {
       ok: false,
       message: 'No hay sesión de ususario'
@@ -57,75 +55,98 @@ export const placeOrder = async( productIds: ProductToOrder[], address: Address 
     return totals;
   }, { subTotal: 0, tax: 0, total: 0})
 
-  console.log({subTotal, tax, total});
+  // Crear la transacción de base de datos
 
+  try {
 
-  // Crear la transacción
+    const prismaTx = await prisma.$transaction(async (tx) => {
 
-  const prismaTx = await prisma.$transaction( async(tx) => {
+      // 1. Actualizar el stock de los productos
+      const updatedProductsPromises = products.map((product) => {
 
-    // 1. Actualizar el stock de los productos
-    const updatedProductsPromises = products.map( ( product) => {
+        // Acumular los valores
+        const productQuantity = productIds.filter(
+          p => p.productId === product.id
+        ).reduce((acc, item) => item.quantity + acc, 0)
 
-      // Acumular los valores
-      const productQuantity = productIds.filter(
-        p => p.productId === product.id
-      ).reduce( (acc, item ) => item.quantity + acc, 0 )
+        if (productQuantity === 0) {
+          throw new Error(`${product.id} no tiene cantidad definida`)
+        }
 
-      if ( productQuantity === 0 ) {
-        throw new Error(`${ product.id } no tiene cantidad definida`)
-      }
+        return tx.product.update({
+          where: { id: product.id },
+          data: {
+            // inStock: product.inStock - productQuantity // No hacer
+            inStock: {
+              decrement: productQuantity
+            }
+          }
+        })
+      })
 
-      return tx.product.update({
-        where: { id: product.id },
-        data: {
-          inStock: product.inStock - productQuantity
+      const updatedProducts = await Promise.all(updatedProductsPromises);
+
+      // Verificar valores engativos en las existencia = No hay stock
+      updatedProducts.forEach(product => {
+        if (product.inStock < 0) {
+          throw new Error(`${product.title} no tiene inventario suficiente`);
         }
       })
-    })
-    
 
-    // 2. Crear la orden - Encabezado - Detalles
-    const order = await tx.order.create({
-      data: {
-        userId: userId1,
-        itemsInOrder: itemsInOrder,
-        subTotal: subTotal,
-        tax: tax,
-        total: total,
+      // 2. Crear la orden - Encabezado - Detalles
+      const order = await tx.order.create({
+        data: {
+          userId: userId,
+          itemsInOrder: itemsInOrder,
+          subTotal: subTotal,
+          tax: tax,
+          total: total,
 
-        OrderItem: {
-          createMany: {
-            data: productIds.map( p => ({
-              quantity: p.quantity,
-              size: p.size,
-              productId: p.productId,
-              price: products.find( product => product.id === p.productId )?.price ?? 0
-            }))
+          OrderItem: {
+            createMany: {
+              data: productIds.map(p => ({
+                quantity: p.quantity,
+                size: p.size,
+                productId: p.productId,
+                price: products.find(product => product.id === p.productId)?.price ?? 0
+              }))
+            }
           }
+
         }
+      })
 
+      // Validar, si el price es cero, entonces, lanzar un error
+
+      // 3. Crear la dirección de la orden
+      // Address
+      const { country, ...restAddress } = address;
+      const orderAddress = await tx.orderAddress.create({
+        data: {
+          ...restAddress,
+          countryId: country,
+          orderId: order.id,
+        }
+      })
+
+      return {
+        updateProducts: updatedProducts,
+        order: order,
+        orderAddress: orderAddress,
       }
-    })
-
-    // Validar, si el price es cero, entonces, lanzar un error
-
-    // 3. Crear la dirección de la orden
-    // Address
-    const { country, ...restAddress } = address;
-    const orderAddress = await tx.orderAddress.create({
-      data: {
-        ...restAddress,
-        countryId: country,
-        orderId: order.id,
-      }
-    })
+    });
 
     return {
-      updateProducts: [],
-      order: order,
-      orderAddress: orderAddress,
+      ok: true,
+      order: prismaTx.order,
+      prismaTx: prismaTx,
     }
-  });
+    
+  } catch (error: any) {
+    return {
+      ok: false,
+      message: error?.message,
+    }
+  }
 
 }

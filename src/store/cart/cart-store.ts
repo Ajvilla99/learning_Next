@@ -19,8 +19,8 @@ interface State {
   addProductToCart: ( product: CartProduct ) => void;
   updateProductQuantity: ( product: CartProduct, quantity: number ) => void;
   removeProduct: ( product: CartProduct ) => void;
-  // removeProduct
-
+  
+  clearCart: () => void;
 }
 
 
@@ -100,7 +100,11 @@ export const useCartStore = create<State>()(
           );
 
           set({ cart: updatedCartProduct })
-        }
+        },
+
+        clearCart: () => {
+          set({ cart: [] })
+        },
       })
     ,{
       // Nombre de la llave en el localstorage
