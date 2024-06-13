@@ -107,7 +107,6 @@ model UserAddress {
 }
 
 // Order de compras
-
 model Order {
   id           String    @id @default(uuid())
   subTotal     Float
@@ -125,6 +124,8 @@ model Order {
   userId       String
   OrderItem    OrderItem[]
   OrderAddress OrderAddress?
+
+  transactionId String?
 }
 
 model OrderItem {

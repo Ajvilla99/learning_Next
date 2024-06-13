@@ -78,7 +78,6 @@ export default async function OrdersPage() {
                       Ver orden
                     </Link>
                   </td>
-
                 </tr>
               ))
             }
