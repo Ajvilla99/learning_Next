@@ -15,3 +15,5 @@ export * from './order/get-order-by-user';
 export * from './address/set-user-address';
 export * from './address/delete-user-address';
 export * from './address/get-user-address';
+
+export * from './payments/setTransactionId';
