@@ -1,13 +1,11 @@
 'use server';
 
-import { redirect } from "next/navigation";
 import Image from "next/image";
-import clsx from "clsx";
+import { redirect } from "next/navigation";
 
-import { IoCardOutline } from "react-icons/io5";
 
 import { getOrderById } from "@/actions";
-import { PaypalButton, Title } from "@/components";
+import { OrderStatus, PaypalButton, Title } from "@/components";
 import { currentcyFormat } from "@/utils";
 
 
@@ -41,20 +39,7 @@ export default async function OrdersByIdPage({ params }: Props) {
           {/* carrito */}
           <div className="flex flex-col mt-5">
             
-            <div className={
-              clsx(
-                "flex items-center rounded-md py-2 px-3.5 text-xs font-bold text-white mb-5 mr-5",
-                {
-                  'bg-red-500': !order!.isPaid,
-                  'bg-green-700': order!.isPaid,
-                }
-              )
-            }>
-              <IoCardOutline size={30}/>
-              <span className="mx-2">
-                { order!.isPaid ? 'Pagada' : 'No pagada'}
-              </span>
-            </div>
+            <OrderStatus isPaid={ order?.isPaid ?? false } />
 
             {/* Items */}
             {
@@ -122,10 +107,17 @@ export default async function OrdersByIdPage({ params }: Props) {
 
               <div className="mt-5 mb-2 w-full">
 
-                <PaypalButton
-                  amount={ order!.total }
-                  orderId={ order!.id }
-                />
+                {
+                  order?.isPaid ? (
+                    <OrderStatus isPaid={ order?.isPaid ?? false } />
+                  )
+                  : (
+                    <PaypalButton
+                      amount={ order!.total }
+                      orderId={ order!.id }
+                    />
+                  )
+                }
               
               </div>
 

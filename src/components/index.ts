@@ -18,6 +18,8 @@ export * from './product/slideshow/ProductSlideshow';
 export * from './product/stock-label/StockLabel';
 // Providers
 export * from './providers/Providers'
+// Orders 
+export * from './orders/OrderStatus'
 
 
 
