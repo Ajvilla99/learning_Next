@@ -11,6 +11,7 @@ export * from './country/get-country';
 export * from './order/place-order';
 export * from './order/get-order-by-id';
 export * from './order/get-order-by-user';
+export * from './order/get-paginated-orders';
 
 export * from './address/set-user-address';
 export * from './address/delete-user-address';
@@ -18,3 +19,6 @@ export * from './address/get-user-address';
 
 export * from './payments/setTransactionId';
 export * from './payments/paypal-check-payment';
+
+export * from './user/get-paginated-users';
+export * from './user/change-user-role';
