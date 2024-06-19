@@ -28,7 +28,6 @@ body {
 }
 
 
-
 @keyframes fadeIn {
   0% {opacity: 0;}
   100% {opacity: 1;}
@@ -59,4 +58,8 @@ body {
 
 .btn-disabled {
   @apply bg-gray-400 text-white py-2 px-4 rounded transition-all ;
+}
+
+.btn-danger {
+  @apply bg-red-500 hover:bg-red-700 text-white py-2 px-4 transition-all;
 }
