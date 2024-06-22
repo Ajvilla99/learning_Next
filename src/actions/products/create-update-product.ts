@@ -1,6 +1,7 @@
 'use server';
 
-import { Gender } from '@prisma/client';
+import prisma from '@/lib/prisma';
+import { Gender, Product, Size } from '@prisma/client';
 import { z } from 'zod';
 
 const productSchema = z.object({
@@ -16,6 +17,7 @@ const productSchema = z.object({
     .number()
     .min(0)
     .transform( val => Number( val.toFixed(0) ) ),
+  categoryId: z.string().uuid(),
   sizes: z.coerce.string().transform( val => val.split(',') ),
   tags: z.string(),
   gender: z.nativeEnum(Gender)
@@ -30,10 +32,58 @@ export const createUpdateProduct = async( formData: FormData ) => {
   if ( !productParsed.success ) {
     console.log( productParsed.error );
     return { ok: false }
-  } else {
-    console.log( productParsed.data );
   }
 
+  const product = productParsed.data;
+  product.slug = product.slug.toLowerCase().replace(/ /g, '-' ).trim(); // Validar si hay espacios delante o detras
+
+  const { id, ...rest } = product;
+
+  const prismaTx = await prisma.$transaction( async (tx) => {
+
+    let product: Product;
+    const tagsAarray = rest.tags.split(',').map( tag => tag.trim().toLowerCase() );
+
+    if ( id ) {
+      // Actualizar
+      product = await prisma.product.update({
+        where: { id },
+        data: {
+          ...rest,
+          sizes: {
+            set: rest.sizes as Size[],
+          },
+          tags: {
+            set: tagsAarray
+          }
+        },
+      })
+
+    } else {
+      // Crear
+      product = await prisma.product.create({
+        data: {
+          ...rest,
+          sizes: {
+            set: rest.sizes as Size[]
+          },
+          tags: {
+            set: tagsAarray
+          }
+        }
+      })
+    }
+
+    console.log({ product })
+
+    return {
+      product
+    }
+
+  });
+
+  // TODO: RevalidatePaths
+  
   return {
     ok: true,
   }
