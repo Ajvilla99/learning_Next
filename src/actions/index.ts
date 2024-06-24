@@ -2,17 +2,18 @@ export * from './auth/login';
 export * from './auth/logout';
 export * from './auth/register';
 
-export * from './products/product-pagination';
-export * from './products/get-product-by-slug';
-export * from './products/get-stock-by-slug';
-export * from './products/create-update-product';
+export * from './product/create-update-product';
+export * from './product/delete-product-image';
+export * from './product/get-product-by-slug';
+export * from './product/get-stock-by-slug';
+export * from './product/product-pagination';
 
 export * from './country/get-country';
 
-export * from './order/place-order';
 export * from './order/get-order-by-id';
 export * from './order/get-order-by-user';
 export * from './order/get-paginated-orders';
+export * from './order/place-order';
 
 export * from './address/set-user-address';
 export * from './address/delete-user-address';
