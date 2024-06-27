@@ -83,7 +83,7 @@ export const createUpdateProduct = async( formData: FormData ) => {
       // Recorrer las imagenes y guardarlas
 
       if ( formData.getAll('images') ) {
-        const images = await uploadImages(formData.getAll('images') as File[] );
+        const images = await uploadImages(formData.getAll('images') as File[]);
         if ( !images ) {
           throw new Error('No s epudo cargar las imagenes, rollingback');
         }
@@ -144,10 +144,6 @@ const uploadImages = async( images: File[] ) => {
     
     const uploadedImages = await Promise.all( uploadPromises );;
     return uploadedImages;
-
-    return {
-      ok: true
-    }
     
   } catch (error) {
     

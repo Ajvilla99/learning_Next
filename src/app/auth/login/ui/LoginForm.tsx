@@ -42,7 +42,7 @@ export const LoginForm = () => {
         aria-live="polite"
         aria-atomic="true"
       >
-        {state === "Invalid credentials" && (
+        { state === "Invalid credentials" && (
           <div className="w-full px-1 py-1 mb-2 rounded bg-red-200 flex items-center justify-center">
             <IoInformationOutline className="h-5 w-5 text-red-600" />
             <p className="text-sm text-red-500">{state}</p>
