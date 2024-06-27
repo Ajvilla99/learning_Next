@@ -1,6 +1,5 @@
 import type { Size } from "@/interfaces"
 import clsx from "clsx";
-import { underline } from "discord.js";
 
 interface Props {
     selectedSize?: Size;
